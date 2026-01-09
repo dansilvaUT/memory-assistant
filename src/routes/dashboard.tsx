@@ -36,7 +36,9 @@ function Dashboard() {
     const fetchMemoriesData = async () => {
       if (user) {
         try {
-          const data = await getMemories(user.id)
+          const data = await getMemories({
+            data: { userId: user.id },
+          })
           setMemories(data.memories || [])
           setSessions(data.sessions || [])
         } catch (error) {
