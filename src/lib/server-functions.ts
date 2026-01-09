@@ -3,10 +3,30 @@
 
 'use server'
 
-// Lazy import prisma to ensure it's only loaded on the server
+import type { PrismaClient } from '@prisma/client'
+
+// Lazy initialize Prisma to ensure it's only loaded on the server
+let prismaInstance: PrismaClient | null = null
+
 const getPrisma = async () => {
-  const { default: prisma } = await import('./prisma')
-  return prisma
+  if (!prismaInstance) {
+    const { PrismaClient } = await import('@prisma/client')
+    const { PrismaPg } = await import('@prisma/adapter-pg')
+    const pg = await import('pg')
+
+    const pool = new pg.default.Pool({
+      connectionString: process.env.DATABASE_URL,
+    })
+
+    const adapter = new PrismaPg(pool)
+
+    prismaInstance = new PrismaClient({
+      adapter,
+      log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+    })
+  }
+
+  return prismaInstance
 }
 
 export async function saveMemory(data: {
