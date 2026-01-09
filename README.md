@@ -72,12 +72,27 @@ ANTHROPIC_API_KEY="your-api-key-here"
 
 ### 4. Database Setup
 
+**Install PostgreSQL** (if not already installed):
 ```bash
-# Create the database
-createdb memory_assistant
+brew install postgresql@17
+brew services start postgresql@17
+```
 
-# Run migrations (once we set up Prisma/Drizzle)
-# npm run db:migrate
+**Create the database**:
+```bash
+/opt/homebrew/opt/postgresql@17/bin/createdb memory_assistant
+```
+
+**Update your `.env` file** with your username:
+```
+DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/memory_assistant"
+```
+Replace `YOUR_USERNAME` with your system username.
+
+**Run database migrations**:
+```bash
+npx prisma migrate dev
+npx prisma generate
 ```
 
 ### 5. Start Development Server
