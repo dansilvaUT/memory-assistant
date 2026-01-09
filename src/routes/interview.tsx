@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { questions } from '../data/questions'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
-import { saveMemory, completeSession } from '../lib/server-functions'
+import { saveMemory, completeSession } from '../lib/local-storage'
 
 export const Route = createFileRoute('/interview')({ component: InterviewPage })
 
@@ -52,18 +52,16 @@ function InterviewPage() {
   }
 
   const handleSaveAndNext = async () => {
-    // Save current answer to database
+    // Save current answer to localStorage
     if (currentAnswer.trim() && user) {
       setIsSaving(true)
       try {
-        const result = await saveMemory({
-          data: {
-            userId: user.id,
-            questionId: currentQuestion.id,
-            questionPrompt: currentQuestion.prompt,
-            answerText: currentAnswer,
-            category: currentQuestion.category,
-          },
+        const result = saveMemory({
+          userId: user.id,
+          questionId: currentQuestion.id,
+          questionPrompt: currentQuestion.prompt,
+          answerText: currentAnswer,
+          category: currentQuestion.category,
         })
 
         if (result.sessionId && !sessionId) {
@@ -91,9 +89,7 @@ function InterviewPage() {
       // Complete the session
       if (sessionId) {
         try {
-          await completeSession({
-            data: { sessionId },
-          })
+          completeSession(sessionId)
         } catch (error) {
           console.error('Error completing session:', error)
         }

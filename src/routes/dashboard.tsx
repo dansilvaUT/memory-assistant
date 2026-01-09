@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '../contexts/AuthContext'
 import { useEffect, useState } from 'react'
-import { getMemories } from '../lib/server-functions'
+import { getMemories } from '../lib/local-storage'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
@@ -33,12 +33,10 @@ function Dashboard() {
   }, [user, isLoading, navigate])
 
   useEffect(() => {
-    const fetchMemoriesData = async () => {
+    const fetchMemoriesData = () => {
       if (user) {
         try {
-          const data = await getMemories({
-            data: { userId: user.id },
-          })
+          const data = getMemories(user.id)
           setMemories(data.memories || [])
           setSessions(data.sessions || [])
         } catch (error) {
