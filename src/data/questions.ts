@@ -1,7 +1,7 @@
 import { Question } from '../types/questions'
 
 export const questions: Question[] = [
-  // Childhood Questions
+  // Testing with just 3 questions for now
   {
     id: 'ch-001',
     category: 'childhood',
@@ -28,6 +28,22 @@ export const questions: Question[] = [
     isActive: true,
     tags: ['friendship', 'relationships'],
   },
+  {
+    id: 'gen-001',
+    category: 'general',
+    prompt: 'What makes you laugh? Describe a time you laughed so hard you cried.',
+    followUpPrompts: [
+      'Who were you with?',
+      'What was happening?',
+      'Do you still laugh about this moment?',
+    ],
+    order: 3,
+    isActive: true,
+    tags: ['joy', 'humor', 'happiness'],
+  },
+
+  // More questions commented out for testing
+  /*
   {
     id: 'ch-003',
     category: 'childhood',

@@ -12,6 +12,8 @@ function InterviewPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [currentAnswer, setCurrentAnswer] = useState('')
+  const [sessionId, setSessionId] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
   const currentQuestion = questions[currentQuestionIndex]
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
@@ -48,21 +50,59 @@ function InterviewPage() {
     return null
   }
 
-  const handleSaveAndNext = () => {
-    // Save current answer
-    if (currentAnswer.trim()) {
-      setAnswers((prev) => ({
-        ...prev,
-        [currentQuestion.id]: currentAnswer,
-      }))
+  const handleSaveAndNext = async () => {
+    // Save current answer to database
+    if (currentAnswer.trim() && user) {
+      setIsSaving(true)
+      try {
+        const response = await fetch('/api/-memories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.id,
+            questionId: currentQuestion.id,
+            questionPrompt: currentQuestion.prompt,
+            answerText: currentAnswer,
+            category: currentQuestion.category,
+          }),
+        })
+
+        const data = await response.json()
+        if (data.sessionId && !sessionId) {
+          setSessionId(data.sessionId)
+        }
+
+        // Store in local state too
+        setAnswers((prev) => ({
+          ...prev,
+          [currentQuestion.id]: currentAnswer,
+        }))
+      } catch (error) {
+        console.error('Error saving memory:', error)
+        alert('Failed to save memory. Please try again.')
+        setIsSaving(false)
+        return
+      }
+      setIsSaving(false)
     }
 
     // Move to next question or finish
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1)
     } else {
-      // TODO: Save session to database
-      alert('Interview complete! (Database saving coming next)')
+      // Complete the session
+      if (sessionId) {
+        try {
+          await fetch('/api/-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId }),
+          })
+        } catch (error) {
+          console.error('Error completing session:', error)
+        }
+      }
+      alert('Interview complete! Your memories have been saved.')
       navigate({ to: '/dashboard' })
     }
   }
@@ -181,9 +221,12 @@ function InterviewPage() {
 
             <button
               onClick={handleSaveAndNext}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-colors shadow-sm touch-manipulation"
+              disabled={isSaving}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-colors shadow-sm touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {currentQuestionIndex === questions.length - 1 ? (
+              {isSaving ? (
+                'Saving...'
+              ) : currentQuestionIndex === questions.length - 1 ? (
                 <>
                   <Save className="w-5 h-5" />
                   Complete Interview

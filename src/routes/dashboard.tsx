@@ -1,18 +1,56 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '../contexts/AuthContext'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
+
+interface Memory {
+  id: string
+  questionPrompt: string
+  answerText: string
+  createdAt: string
+}
+
+interface Session {
+  id: string
+  status: string
+  startedAt: string
+  memories: Memory[]
+}
 
 function Dashboard() {
   const { user, logout, isLoading } = useAuth()
   const navigate = useNavigate()
+  const [memories, setMemories] = useState<Memory[]>([])
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [loadingData, setLoadingData] = useState(true)
 
   useEffect(() => {
     if (!isLoading && !user) {
       navigate({ to: '/login' })
     }
   }, [user, isLoading, navigate])
+
+  useEffect(() => {
+    const fetchMemories = async () => {
+      if (user) {
+        try {
+          const response = await fetch(`/api/-memories?userId=${user.id}`)
+          const data = await response.json()
+          setMemories(data.memories || [])
+          setSessions(data.sessions || [])
+        } catch (error) {
+          console.error('Error fetching memories:', error)
+        } finally {
+          setLoadingData(false)
+        }
+      }
+    }
+
+    if (user) {
+      fetchMemories()
+    }
+  }, [user])
 
   if (isLoading) {
     return (
@@ -49,11 +87,15 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-3xl sm:text-2xl font-bold text-gray-900 mb-2">0</h3>
+            <h3 className="text-3xl sm:text-2xl font-bold text-gray-900 mb-2">
+              {loadingData ? '...' : memories.length}
+            </h3>
             <p className="text-gray-600 text-sm sm:text-base">Memories Captured</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-3xl sm:text-2xl font-bold text-gray-900 mb-2">0</h3>
+            <h3 className="text-3xl sm:text-2xl font-bold text-gray-900 mb-2">
+              {loadingData ? '...' : sessions.length}
+            </h3>
             <p className="text-gray-600 text-sm sm:text-base">Interview Sessions</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-6">
@@ -93,6 +135,40 @@ function Dashboard() {
             </a>
           </div>
         </div>
+
+        {/* Recent Memories */}
+        {memories.length > 0 && (
+          <div className="mt-8 sm:mt-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Memories</h2>
+            <div className="space-y-4">
+              {memories.slice(0, 5).map((memory) => (
+                <div
+                  key={memory.id}
+                  className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+                >
+                  <p className="text-sm font-semibold text-blue-600 mb-2">
+                    {memory.questionPrompt}
+                  </p>
+                  <p className="text-gray-700 leading-relaxed line-clamp-3">{memory.answerText}</p>
+                  <p className="text-xs text-gray-500 mt-3">
+                    {new Date(memory.createdAt).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </p>
+                </div>
+              ))}
+            </div>
+            {memories.length > 5 && (
+              <div className="mt-6 text-center">
+                <button className="text-blue-600 hover:text-blue-700 font-semibold">
+                  View all {memories.length} memories →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
