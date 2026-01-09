@@ -51,16 +51,33 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Start Your First Memory Session
-          </h2>
-          <p className="text-gray-400 mb-6">
-            Let's begin capturing your precious moments through guided questions
-          </p>
-          <button className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50">
-            Start Interview
-          </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 text-center">
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Start Your First Memory Session
+            </h2>
+            <p className="text-gray-400 mb-6">
+              Let's begin capturing your precious moments through guided questions
+            </p>
+            <button className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50">
+              Start Interview
+            </button>
+          </div>
+
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 text-center">
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Browse Questions
+            </h2>
+            <p className="text-gray-400 mb-6">
+              Explore the questions that will guide your memory journey
+            </p>
+            <a
+              href="/questions"
+              className="inline-block px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
+            >
+              View All Questions
+            </a>
+          </div>
         </div>
       </div>
     </div>
