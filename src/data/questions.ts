@@ -53,7 +53,7 @@ export const questions: Question[] = [
       'Why was this activity so special to you?',
       'Do you still enjoy similar activities today?',
     ],
-    order: 3,
+    order: 4,
     isActive: true,
     tags: ['hobbies', 'play', 'activities'],
   },
@@ -292,6 +292,7 @@ export const questions: Question[] = [
     isActive: true,
     tags: ['pride', 'achievement', 'self-worth'],
   },
+  */
 ]
 
 // Helper function to get questions by category
