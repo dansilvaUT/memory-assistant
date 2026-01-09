@@ -59,9 +59,12 @@ function Dashboard() {
             <p className="text-gray-600 mb-6 text-sm sm:text-base leading-relaxed">
               Let's begin capturing your precious moments through guided questions
             </p>
-            <button className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-colors shadow-sm touch-manipulation">
+            <a
+              href="/interview"
+              className="inline-block w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-colors shadow-sm touch-manipulation text-center"
+            >
               Start Interview
-            </button>
+            </a>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
