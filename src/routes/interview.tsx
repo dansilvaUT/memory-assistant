@@ -57,13 +57,11 @@ function InterviewPage() {
       setIsSaving(true)
       try {
         const result = await saveMemory({
-          data: {
-            userId: user.id,
-            questionId: currentQuestion.id,
-            questionPrompt: currentQuestion.prompt,
-            answerText: currentAnswer,
-            category: currentQuestion.category,
-          },
+          userId: user.id,
+          questionId: currentQuestion.id,
+          questionPrompt: currentQuestion.prompt,
+          answerText: currentAnswer,
+          category: currentQuestion.category,
         })
 
         if (result.sessionId && !sessionId) {
@@ -91,7 +89,7 @@ function InterviewPage() {
       // Complete the session
       if (sessionId) {
         try {
-          await completeSession({ data: sessionId })
+          await completeSession(sessionId)
         } catch (error) {
           console.error('Error completing session:', error)
         }

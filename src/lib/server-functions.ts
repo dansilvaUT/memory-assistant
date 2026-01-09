@@ -1,14 +1,17 @@
-import { createServerFn } from '@tanstack/start'
+// Server-side database operations
+// These are called from the client and execute on the server
+
+'use server'
+
 import prisma from './prisma'
 
-// Server function to save a memory
-export const saveMemory = createServerFn('POST', async (data: {
+export async function saveMemory(data: {
   userId: string
   questionId: string
   questionPrompt: string
   answerText: string
   category: string
-}) => {
+}) {
   try {
     const { userId, questionId, questionPrompt, answerText, category } = data
 
@@ -82,10 +85,9 @@ export const saveMemory = createServerFn('POST', async (data: {
     console.error('Error saving memory:', error)
     throw new Error('Failed to save memory')
   }
-})
+}
 
-// Server function to get memories
-export const getMemories = createServerFn('GET', async (userId: string) => {
+export async function getMemories(userId: string) {
   try {
     const memories = await prisma.memory.findMany({
       where: { userId },
@@ -113,10 +115,9 @@ export const getMemories = createServerFn('GET', async (userId: string) => {
     console.error('Error fetching memories:', error)
     throw new Error('Failed to fetch memories')
   }
-})
+}
 
-// Server function to complete a session
-export const completeSession = createServerFn('POST', async (sessionId: string) => {
+export async function completeSession(sessionId: string) {
   try {
     const session = await prisma.memorySession.update({
       where: { id: sessionId },
@@ -131,4 +132,4 @@ export const completeSession = createServerFn('POST', async (sessionId: string) 
     console.error('Error completing session:', error)
     throw new Error('Failed to complete session')
   }
-})
+}
