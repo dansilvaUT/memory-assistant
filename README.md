@@ -2,22 +2,35 @@
 
 An intelligent memory capture application that guides users through a conversational interview experience to document their life stories, experiences, and precious moments.
 
-## Features
+**🚀 Currently in active development for a hackathon!**
 
-- **Conversational Interview Flow**: One question at a time approach for natural memory capture
-- **AI-Powered Assistance**: Smart suggestions and text enhancement using Anthropic Claude
-- **Rich Media Support**: Photos, audio, and video uploads
-- **Timeline Organization**: Memories organized chronologically
-- **Modern UI**: Clean, minimal design with smooth animations
+## Current Features
+
+✅ **Conversational Interview Flow** - One question at a time for natural memory capture
+✅ **Progress Tracking** - Visual progress bar and question counter
+✅ **localStorage Storage** - Client-side persistence (temporary for testing)
+✅ **Mock Authentication** - Simple login/signup for demos
+✅ **Mobile Responsive** - Optimized for iPhone and Android devices
+✅ **Dashboard** - View saved memories and session statistics
+✅ **Clean UI** - FamilySearch-inspired design with Tailwind CSS
+
+## Planned Features
+
+⏳ **AI-Powered Assistance** - Smart suggestions using Anthropic Claude (coming soon)
+⏳ **Rich Media Support** - Photos, audio, and video uploads
+⏳ **PostgreSQL Database** - Persistent server-side storage
+⏳ **Timeline Organization** - Chronological memory viewing
+⏳ **Real Authentication** - Secure user accounts
 
 ## Tech Stack
 
-- **Frontend & Backend**: TanStack Start (Full-stack React framework)
-- **Database**: PostgreSQL
-- **AI**: Anthropic Claude API
-- **Authentication**: TBD (Clerk/Auth.js/Custom JWT)
-- **File Storage**: TBD (Cloudinary/Uploadthing/AWS S3)
-- **Styling**: Tailwind CSS (already configured)
+- **Framework**: TanStack Start (Full-stack React)
+- **Routing**: TanStack Router
+- **Styling**: Tailwind CSS v4
+- **Database**: PostgreSQL with Prisma ORM (configured, using localStorage for now)
+- **Storage**: localStorage (temporary testing solution)
+- **Icons**: Lucide React
+- **Language**: TypeScript
 
 ## Project Structure
 
@@ -31,77 +44,38 @@ memory-assistant/
 └── package.json
 ```
 
-## Prerequisites
+## Quick Start
 
-Before you begin, ensure you have the following installed:
-- **Node.js**: v18 or higher
-- **npm**: v9 or higher
-- **PostgreSQL**: v14 or higher
-- **Git**: For version control
+### Prerequisites
 
-## Getting Started
+- **Node.js** v20.x or higher
+- **npm** v10.x or higher
+- **Git**
 
-### 1. Clone the Repository
+### Installation
 
 ```bash
-git clone <your-github-repo-url>
+# Clone the repository
+git clone https://github.com/dansilvaUT/memory-assistant.git
 cd memory-assistant
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
-```
 
-### 3. Environment Setup
+# Create environment file (optional - uses localStorage by default)
+cp .env.example .env
 
-Create a `.env` file in the root directory:
-
-```bash
-# Database
-DATABASE_URL="postgresql://username:password@localhost:5432/memory_assistant"
-
-# Anthropic Claude API
-ANTHROPIC_API_KEY="your-api-key-here"
-
-# Other environment variables will be added as needed
-```
-
-**Important**: Never commit the `.env` file to the repository. It's already included in `.gitignore`.
-
-### 4. Database Setup
-
-**Install PostgreSQL** (if not already installed):
-```bash
-brew install postgresql@17
-brew services start postgresql@17
-```
-
-**Create the database**:
-```bash
-/opt/homebrew/opt/postgresql@17/bin/createdb memory_assistant
-```
-
-**Update your `.env` file** with your username:
-```
-DATABASE_URL="postgresql://YOUR_USERNAME@localhost:5432/memory_assistant"
-```
-Replace `YOUR_USERNAME` with your system username.
-
-**Run database migrations**:
-```bash
-npx prisma migrate dev
-npx prisma generate
-```
-
-### 5. Start Development Server
-
-```bash
+# Start the development server
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`
+The app will be available at **http://localhost:3000** 🎉
+
+### That's it!
+
+The app uses localStorage for storage, so no database setup is required for testing. Just start coding!
+
+**For detailed setup instructions**, see [SETUP.md](./SETUP.md)
 
 ## Development Workflow
 
