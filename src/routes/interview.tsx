@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { questions } from '../data/questions'
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
+import { saveMemory, completeSession } from '../lib/server-functions'
 
 export const Route = createFileRoute('/interview')({ component: InterviewPage })
 
@@ -55,21 +56,18 @@ function InterviewPage() {
     if (currentAnswer.trim() && user) {
       setIsSaving(true)
       try {
-        const response = await fetch('/api/-memories', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        const result = await saveMemory({
+          data: {
             userId: user.id,
             questionId: currentQuestion.id,
             questionPrompt: currentQuestion.prompt,
             answerText: currentAnswer,
             category: currentQuestion.category,
-          }),
+          },
         })
 
-        const data = await response.json()
-        if (data.sessionId && !sessionId) {
-          setSessionId(data.sessionId)
+        if (result.sessionId && !sessionId) {
+          setSessionId(result.sessionId)
         }
 
         // Store in local state too
@@ -93,11 +91,7 @@ function InterviewPage() {
       // Complete the session
       if (sessionId) {
         try {
-          await fetch('/api/-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sessionId }),
-          })
+          await completeSession({ data: sessionId })
         } catch (error) {
           console.error('Error completing session:', error)
         }
