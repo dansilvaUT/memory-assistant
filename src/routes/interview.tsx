@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, Save } from 'lucide-react'
 export const Route = createFileRoute('/interview')({ component: InterviewPage })
 
 function InterviewPage() {
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
   const navigate = useNavigate()
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -17,10 +17,11 @@ function InterviewPage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
 
   useEffect(() => {
-    if (!user) {
+    // Only redirect if loading is done and there's no user
+    if (!isLoading && !user) {
       navigate({ to: '/login' })
     }
-  }, [user, navigate])
+  }, [user, isLoading, navigate])
 
   useEffect(() => {
     // Load saved answer for current question
@@ -30,6 +31,18 @@ function InterviewPage() {
       setCurrentAnswer('')
     }
   }, [currentQuestionIndex, currentQuestion, answers])
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!user) {
     return null

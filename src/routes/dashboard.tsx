@@ -5,14 +5,25 @@ import { useEffect } from 'react'
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
 function Dashboard() {
-  const { user, logout } = useAuth()
+  const { user, logout, isLoading } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoading && !user) {
       navigate({ to: '/login' })
     }
-  }, [user, navigate])
+  }, [user, isLoading, navigate])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!user) {
     return null
