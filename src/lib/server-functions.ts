@@ -3,7 +3,11 @@
 
 'use server'
 
-import prisma from './prisma'
+// Lazy import prisma to ensure it's only loaded on the server
+const getPrisma = async () => {
+  const { default: prisma } = await import('./prisma')
+  return prisma
+}
 
 export async function saveMemory(data: {
   userId: string
@@ -13,6 +17,7 @@ export async function saveMemory(data: {
   category: string
 }) {
   try {
+    const prisma = await getPrisma()
     const { userId, questionId, questionPrompt, answerText, category } = data
 
     // Create or get the current session
@@ -89,6 +94,7 @@ export async function saveMemory(data: {
 
 export async function getMemories(userId: string) {
   try {
+    const prisma = await getPrisma()
     const memories = await prisma.memory.findMany({
       where: { userId },
       include: {
@@ -119,6 +125,7 @@ export async function getMemories(userId: string) {
 
 export async function completeSession(sessionId: string) {
   try {
+    const prisma = await getPrisma()
     const session = await prisma.memorySession.update({
       where: { id: sessionId },
       data: {
