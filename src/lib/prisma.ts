@@ -1,26 +1,25 @@
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import pg from 'pg'
+// This file is server-only and should never be imported by client code
+/// <reference types="@prisma/client" />
 
-// Create PostgreSQL connection pool
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+let prismaInstance: any = null
 
-// Create Prisma adapter
-const adapter = new PrismaPg(pool)
+export async function getPrismaClient() {
+  if (!prismaInstance) {
+    const { PrismaClient } = await import('@prisma/client')
+    const { PrismaPg } = await import('@prisma/adapter-pg')
+    const pg = await import('pg')
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting your database connection limit.
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+    const pool = new pg.default.Pool({
+      connectionString: process.env.DATABASE_URL,
+    })
 
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({
-    adapter,
-    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-  })
+    const adapter = new PrismaPg(pool)
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+    prismaInstance = new PrismaClient({
+      adapter,
+      log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+    })
+  }
 
-export default prisma
+  return prismaInstance
+}

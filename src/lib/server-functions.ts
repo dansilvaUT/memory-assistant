@@ -16,20 +16,9 @@ export const saveMemory = createServerFn({ method: 'POST' }).handler(
     }
   }) => {
     try {
-      // Dynamic imports to ensure server-only code doesn't get bundled for client
-      const { PrismaClient } = await import('@prisma/client')
-      const { PrismaPg } = await import('@prisma/adapter-pg')
-      const pg = await import('pg')
-
-      const pool = new pg.default.Pool({
-        connectionString: process.env.DATABASE_URL,
-      })
-
-      const adapter = new PrismaPg(pool)
-      const prisma = new PrismaClient({
-        adapter,
-        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-      })
+      // Dynamically import the getPrismaClient helper
+      const { getPrismaClient } = await import('./prisma')
+      const prisma = await getPrismaClient()
 
       const { userId, questionId, questionPrompt, answerText, category } = data
 
@@ -109,20 +98,9 @@ export const saveMemory = createServerFn({ method: 'POST' }).handler(
 export const getMemories = createServerFn({ method: 'GET' }).handler(
   async ({ data }: { data: { userId: string } }) => {
     try {
-      // Dynamic imports to ensure server-only code doesn't get bundled for client
-      const { PrismaClient } = await import('@prisma/client')
-      const { PrismaPg } = await import('@prisma/adapter-pg')
-      const pg = await import('pg')
-
-      const pool = new pg.default.Pool({
-        connectionString: process.env.DATABASE_URL,
-      })
-
-      const adapter = new PrismaPg(pool)
-      const prisma = new PrismaClient({
-        adapter,
-        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-      })
+      // Dynamically import the getPrismaClient helper
+      const { getPrismaClient } = await import('./prisma')
+      const prisma = await getPrismaClient()
 
       const { userId } = data
 
@@ -158,20 +136,9 @@ export const getMemories = createServerFn({ method: 'GET' }).handler(
 export const completeSession = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: { sessionId: string } }) => {
     try {
-      // Dynamic imports to ensure server-only code doesn't get bundled for client
-      const { PrismaClient } = await import('@prisma/client')
-      const { PrismaPg } = await import('@prisma/adapter-pg')
-      const pg = await import('pg')
-
-      const pool = new pg.default.Pool({
-        connectionString: process.env.DATABASE_URL,
-      })
-
-      const adapter = new PrismaPg(pool)
-      const prisma = new PrismaClient({
-        adapter,
-        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-      })
+      // Dynamically import the getPrismaClient helper
+      const { getPrismaClient } = await import('./prisma')
+      const prisma = await getPrismaClient()
 
       const { sessionId } = data
 
