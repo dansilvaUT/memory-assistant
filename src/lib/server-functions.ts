@@ -1,4 +1,4 @@
-import { createServerFn } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/start'
 import prisma from './prisma'
 
 // Server function to save a memory
