@@ -2,29 +2,6 @@
 // These are called from the client and execute on the server
 
 import { createServerFn } from '@tanstack/react-start'
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import pg from 'pg'
-
-// Lazy initialize Prisma to ensure it's only created once
-let prismaInstance: PrismaClient | null = null
-
-const getPrisma = () => {
-  if (!prismaInstance) {
-    const pool = new pg.Pool({
-      connectionString: process.env.DATABASE_URL,
-    })
-
-    const adapter = new PrismaPg(pool)
-
-    prismaInstance = new PrismaClient({
-      adapter,
-      log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-    })
-  }
-
-  return prismaInstance
-}
 
 export const saveMemory = createServerFn({ method: 'POST' }).handler(
   async ({
@@ -39,7 +16,21 @@ export const saveMemory = createServerFn({ method: 'POST' }).handler(
     }
   }) => {
     try {
-      const prisma = getPrisma()
+      // Dynamic imports to ensure server-only code doesn't get bundled for client
+      const { PrismaClient } = await import('@prisma/client')
+      const { PrismaPg } = await import('@prisma/adapter-pg')
+      const pg = await import('pg')
+
+      const pool = new pg.default.Pool({
+        connectionString: process.env.DATABASE_URL,
+      })
+
+      const adapter = new PrismaPg(pool)
+      const prisma = new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+      })
+
       const { userId, questionId, questionPrompt, answerText, category } = data
 
       // Create or get the current session
@@ -118,7 +109,21 @@ export const saveMemory = createServerFn({ method: 'POST' }).handler(
 export const getMemories = createServerFn({ method: 'GET' }).handler(
   async ({ data }: { data: { userId: string } }) => {
     try {
-      const prisma = getPrisma()
+      // Dynamic imports to ensure server-only code doesn't get bundled for client
+      const { PrismaClient } = await import('@prisma/client')
+      const { PrismaPg } = await import('@prisma/adapter-pg')
+      const pg = await import('pg')
+
+      const pool = new pg.default.Pool({
+        connectionString: process.env.DATABASE_URL,
+      })
+
+      const adapter = new PrismaPg(pool)
+      const prisma = new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+      })
+
       const { userId } = data
 
       const memories = await prisma.memory.findMany({
@@ -153,7 +158,21 @@ export const getMemories = createServerFn({ method: 'GET' }).handler(
 export const completeSession = createServerFn({ method: 'POST' }).handler(
   async ({ data }: { data: { sessionId: string } }) => {
     try {
-      const prisma = getPrisma()
+      // Dynamic imports to ensure server-only code doesn't get bundled for client
+      const { PrismaClient } = await import('@prisma/client')
+      const { PrismaPg } = await import('@prisma/adapter-pg')
+      const pg = await import('pg')
+
+      const pool = new pg.default.Pool({
+        connectionString: process.env.DATABASE_URL,
+      })
+
+      const adapter = new PrismaPg(pool)
+      const prisma = new PrismaClient({
+        adapter,
+        log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+      })
+
       const { sessionId } = data
 
       const session = await prisma.memorySession.update({
