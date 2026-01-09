@@ -30,23 +30,23 @@ function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 py-8">
       <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Create Account</h1>
-          <p className="text-gray-400">Start capturing your memories today</p>
+        <div className="text-center mb-8 sm:mb-10">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Create Account</h1>
+          <p className="text-gray-600 text-base sm:text-lg">Start capturing your memories today</p>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-10 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 text-red-400 text-sm">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
                 {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
                 Name
               </label>
               <input
@@ -54,14 +54,14 @@ function SignupPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full px-4 py-3 sm:py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="Your name"
                 disabled={isLoading}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
                 Email
               </label>
               <input
@@ -69,14 +69,14 @@ function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full px-4 py-3 sm:py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="you@example.com"
                 disabled={isLoading}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <input
@@ -84,7 +84,7 @@ function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full px-4 py-3 sm:py-3.5 bg-white border border-gray-300 rounded-lg text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="••••••••"
                 disabled={isLoading}
               />
@@ -93,20 +93,24 @@ function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed text-base sm:text-lg touch-manipulation"
             >
               {isLoading ? 'Creating account...' : 'Sign Up'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
+          <div className="mt-6 sm:mt-8 text-center">
+            <p className="text-gray-600 text-sm">
               Already have an account?{' '}
-              <a href="/login" className="text-cyan-400 hover:text-cyan-300 font-medium">
+              <a href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
                 Sign in
               </a>
             </p>
           </div>
+        </div>
+
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>Mock authentication - any email/password will work for now</p>
         </div>
       </div>
     </div>
